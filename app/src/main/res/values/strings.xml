@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">HW 3</string>
+
+    <string-array name="background_music">
+        <item>Go Tech Go!</item>
+        <item>Enter Sandman</item>
+        <item>Jump Around</item>
+    </string-array>
+
+    <string-array name="sound_effect">
+        <item>Clapping</item>
+        <item>Cheering</item>
+        <item>Go Hokies</item>
+    </string-array>
+</resources>
