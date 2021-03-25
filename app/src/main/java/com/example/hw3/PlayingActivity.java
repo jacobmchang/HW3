@@ -30,6 +30,8 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
     String sounds[];
     int seeks[];
 
+    boolean restart;
+
     MusicService musicService;
     MusicCompletionReceiver musicCompletionReceiver;
     Intent startMusicServiceIntent;
@@ -60,6 +62,9 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         if(savedInstanceState != null){
             isInitialized = savedInstanceState.getBoolean(INITIALIZE_STATUS);
             music.setText(savedInstanceState.getString(MUSIC_PLAYING));
+            current = savedInstanceState.getString("display");
+            if (current != null)
+                setImage(current);
         }
 
         startMusicServiceIntent = new Intent(this, MusicService.class);
@@ -74,25 +79,22 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         seeks[1] = intent.getIntExtra("seek2", 0);
         seeks[2] = intent.getIntExtra("seek3", 0);
 
+        setImage(song);
+        music.setText(song);
+
         if(!isInitialized){
             startService(startMusicServiceIntent);
             isInitialized= true;
         }
 
         musicCompletionReceiver = new MusicCompletionReceiver(this);
-        setImage(song);
-        music.setText(song);
-        if (savedInstanceState != null) {
-            current = savedInstanceState.getString("display");
-            setImage(current);
-        }
     }
 
     /**
      * Sets the image of the acitivty
      * @param sound the sounds/song
      */
-    private void setImage(String sound) {
+    public void setImage(String sound) {
         if (sound.equals("Go Tech Go!"))
             image.setImageResource(R.drawable.main);
         else if (sound.equals("Enter Sandman"))
@@ -142,7 +144,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                             }
                             while (musicService.getMusicPlayer() != null) {
-                                if (musicService.getPlayingStatus() == 1) {
+                                if (musicService.getPlayingStatus() == 1 && mp.getPlayer() != null) {
                                     int currentTime = mp.getPlayer().getCurrentPosition() / 1000;
                                     for (int j = 0; j < 3; j++) {
                                         if (times[j] != 0 && currentTime == times[j]) { // If start
@@ -154,7 +156,9 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
                                             threadHandler.post(new Runnable() {
                                                 @Override
                                                 public void run() {
+
                                                     setImage(sound);
+                                                    //musicService.onUpdatePicture(sound);
                                                 }
                                             });
                                         } else if (endTimes[j] != 0 && currentTime == endTimes[j]) { // If stop
@@ -163,6 +167,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
                                             threadHandler.post(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    //musicService.onUpdatePicture(song);
                                                     setImage(song);
                                                 }
                                             });

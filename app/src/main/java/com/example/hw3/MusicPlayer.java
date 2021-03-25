@@ -108,8 +108,9 @@ public class MusicPlayer implements MediaPlayer.OnCompletionListener {
     public void restartMusic() {
         if (player != null) {
             //player.pause();
+            player.release();
+            player= MediaPlayer.create(this.musicService, MUSICPATH[musicIndex]);
             player.seekTo(0);
-            //player.release();
             currentPosition = 0;
             player.start();
             musicStatus = 1;
@@ -119,9 +120,10 @@ public class MusicPlayer implements MediaPlayer.OnCompletionListener {
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         //musicIndex = (musicIndex +1) % MUSICNAME.length;
+        musicStatus = 2;
         mediaPlayer.release();
-        mediaPlayer = null;
-        //playMusic();
+        player = null;
+        //pauseMusic();
     }
 
     public MediaPlayer getPlayer() {

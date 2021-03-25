@@ -15,6 +15,9 @@ public class MusicService extends Service {
     public static final String COMPLETE_INTENT = "complete intent";
     public static final String MUSICNAME = "music name";
 
+    public static final String PICTURE_INTENT = "complete intent";
+    public static final String PICTURENAME = "music name";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -50,6 +53,12 @@ public class MusicService extends Service {
     public void onUpdateMusicName(String musicname) {
         Intent intent = new Intent(COMPLETE_INTENT);
         intent.putExtra(MUSICNAME, musicname);
+        sendBroadcast(intent);
+    }
+
+    public void onUpdatePicture(String picture) {
+        Intent intent = new Intent(PICTURE_INTENT);
+        intent.putExtra(PICTURENAME, picture);
         sendBroadcast(intent);
     }
 
